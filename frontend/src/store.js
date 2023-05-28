@@ -63,17 +63,24 @@ const actions = {
     
     async updateTask({ commit }, task) {
         try {
+
+            const updatedTask = {
+                ...task,
+                dueDate: new Date(task.dueDate).toISOString()
+            }
+
             const response = await fetch(`http://localhost:8080/api/tasks/${task.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(task)
+                body: JSON.stringify(updatedTask)
             });
             if (!response.ok) {
                 const responseData = await response.json();
                 throw new Error(`${response.status} ${response.statusText}: ${responseData.message || ''}`);
             }
+            commit('updateTask', task)
         } catch (error) {
             console.error(error);
         }

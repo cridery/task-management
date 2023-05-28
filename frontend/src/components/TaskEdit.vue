@@ -1,6 +1,5 @@
 <template>
     <div v-if="task">
-        <h2>Edit Task</h2>
         <form @submit.prevent="saveTask">
             <div>
                 <label for="title">Title</label>
@@ -37,9 +36,14 @@ export default {
             default: null
         }
     },
+    watch: {
+        task(newTask) {
+            this.updatedTask = { ...newTask, dueDate: new Date(newTask.dueDate).toISOString().split('T')[0] };
+        }
+    },
     data() {
         return {
-            updatedTask: { ...this.task } // Copy the task object to a separate data property for editing
+            updatedTask: { ...this.task, dueDate: new Date(this.task.dueDate).toISOString().split('T')[0] }
         };
     },
     methods: {
@@ -49,8 +53,5 @@ export default {
         }
     }
 };
-</script>
 
-<style scoped>
-/* Add your component-specific styles here */
-</style>
+</script>
